@@ -25,7 +25,7 @@ def catch_parameter(opt):
 
 # --setup--
 def main(argv):
-    """Main aplication method"""
+    """Main application method"""
     parameters = dict()
     column_names = {'Case ID': 'caseid',
                     'Activity': 'task',
