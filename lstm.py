@@ -16,7 +16,7 @@ def catch_parameter(opt):
               '-m': 'model_type', '-z': 'n_size', '-y': 'l_size',
               '-c': 'folder', '-b': 'model_file', '-x': 'is_single_exec',
               '-t': 'max_trace_size', '-e': 'splits', '-g': 'sub_group',
-              '-v': 'variant', '-r': 'rep'}
+              '-v': 'variant', '-r': 'rep', '-s': 'ns_include'}
     try:
         return switch[opt]
     except:
@@ -25,7 +25,7 @@ def catch_parameter(opt):
 
 # --setup--
 def main(argv):
-    """Main aplication method"""
+    """Main application method"""
     parameters = dict()
     column_names = {'Case ID': 'caseid',
                     'Activity': 'task',
@@ -78,20 +78,20 @@ def main(argv):
         try:
             opts, _ = getopt.getopt(
                 argv,
-                "ho:a:f:i:l:d:p:n:m:z:y:c:b:x:t:e:v:r:",
+                "ho:a:f:i:l:d:p:n:m:z:y:c:b:x:t:e:v:r:s:",
                 ['one_timestamp=', 'activity=',
                  'file_name=', 'imp=', 'lstm_act=',
                  'dense_act=', 'optim=', 'norm_method=',
                  'model_type=', 'n_size=', 'l_size=',
                  'folder=', 'model_file=', 'is_single_exec=',
                  'max_trace_size=', 'splits=', 'sub_group=',
-                 'variant=', 'rep='])
+                 'variant=', 'rep=', 'ns_include='])
             for opt, arg in opts:
                 key = catch_parameter(opt)
                 if arg in ['None', 'none']:
                     parameters[key] = None
                 elif key in ['is_single_exec', 'one_timestamp']:
-                    parameters[key] = arg in ['True', 'true', 1]
+                    parameters[key] = arg in ['True', 'true', '1']
                 elif key in ['imp', 'n_size', 'l_size',
                              'max_trace_size','splits', 'rep']:
                     parameters[key] = int(arg)
@@ -101,7 +101,7 @@ def main(argv):
                                           'column_names': column_names,
                                           'one_timestamp':
                                               parameters['one_timestamp'],
-                                              'ns_include': True}
+                                              'ns_include': parameters['ns_include']}
         except getopt.GetoptError:
             print('Invalid option')
             sys.exit(2)
