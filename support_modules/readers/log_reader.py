@@ -194,7 +194,7 @@ class LogReader(object):
         sup.print_performed_task('Reading log traces ')
         log = pd.read_csv(self.input, dtype={'user': str})
         if self.one_timestamp:
-            self.column_names['Complete Timestamp'] = 'end_timestamp'
+            self.column_names['time:timestamp'] = 'end_timestamp'
             log = log.rename(columns=self.column_names)
             log = log.astype({'caseid': object})
             log = (log[(log.task != 'Start') & (log.task != 'End')]
