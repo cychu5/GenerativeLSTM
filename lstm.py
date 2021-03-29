@@ -27,15 +27,15 @@ def catch_parameter(opt):
 def main(argv):
     """Main application method"""
     parameters = dict()
-    column_names = {'Case ID': 'caseid',
-                    'Activity': 'task',
+    column_names = {'case:concept:name': 'caseid',
+                    'concept:name': 'task',
                     'lifecycle:transition': 'event_type',
-                    'Resource': 'user'}
+                    'org:resource': 'user'}
     parameters['one_timestamp'] = True  # Only one timestamp in the log
     # Similarity btw the resources profile execution (Song e.t. all)
     parameters['rp_sim'] = 0.85
     parameters['batch_size'] = 32 # Usually 32/64/128/256
-    parameters['epochs'] = 2
+    parameters['epochs'] = 100
     # Parameters setting manual fixed or catched by console
     if not argv:
         # Type of LSTM task -> training, pred_log
