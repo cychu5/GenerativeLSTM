@@ -120,13 +120,27 @@ class FeaturesMannager():
         return scaler
 
     def _scale_base(self, log, add_cols):
-        if self.one_timestamp:
-            log, scale_args = self.scale_feature(log, 'dur', self.norm_method)
+        if add_cols:
+            scale_args_dict = {}
+            if self.one_timestamp:
+                log, scale_args = self.scale_feature(log, 'dur', self.norm_method)
+                scale_args_dict['dur'] = scale_args
+            else:
+                log, dur_scale = self.scale_feature(log, 'dur', self.norm_method)
+                log, wait_scale = self.scale_feature(log, 'wait', self.norm_method)
+                scale_args_dict = {'dur': dur_scale, 'wait': wait_scale}
+            for col in add_cols:
+                log, scale_args = self.scale_feature(log, col, self.norm_method)
+                scale_args_dict[col] = scale_args
+            return log, scale_args_dict
         else:
-            log, dur_scale = self.scale_feature(log, 'dur', self.norm_method)
-            log, wait_scale = self.scale_feature(log, 'wait', self.norm_method)
-            scale_args = {'dur': dur_scale, 'wait': wait_scale}
-        return log, scale_args
+            if self.one_timestamp:
+                log, scale_args = self.scale_feature(log, 'dur', self.norm_method)
+            else:
+                log, dur_scale = self.scale_feature(log, 'dur', self.norm_method)
+                log, wait_scale = self.scale_feature(log, 'wait', self.norm_method)
+                scale_args = {'dur': dur_scale, 'wait': wait_scale}
+            return log, scale_args
 
     def _scale_inter(self, log, add_cols):
         # log, scale_args = self.scale_feature(log, 'dur', self.norm_method)

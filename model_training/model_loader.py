@@ -14,6 +14,8 @@ from model_training.models import model_gru_specialized as mspecg
 from model_training.models import model_gru_concatenated as mcatg
 from model_training.models import model_gru_shared_cat as mshcatg
 
+from model_training.models import model_shared_cat_sf as mshcatsf
+
 class ModelLoader():
 
     def __init__(self, parms):
@@ -24,7 +26,8 @@ class ModelLoader():
                                    'shared_cat': mshcat._training_model,
                                    'specialized_gru': mspecg._training_model,
                                    'concatenated_gru': mcatg._training_model,
-                                   'shared_cat_gru': mshcatg._training_model}
+                                   'shared_cat_gru': mshcatg._training_model,
+                                   'shared_cat_sf': mshcatsf._training_model}
 
     def train(self, model_type, examples, ac_weights, rl_weights, output_folder):
         loader = self._get_trainer(model_type)

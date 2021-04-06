@@ -65,6 +65,7 @@ class SequencesCreator():
         # hacer equi como si fueran intercases.
         times = ['dur_norm'] if parms['one_timestamp'] else ['dur_norm', 'wait_norm']
         equi = {'ac_index': 'activities', 'rl_index': 'roles'}
+        sys_features = {'curr_active_cases_norm': 'active_cases'}
         vec = {'prefixes': dict(),
                'next_evt': dict()}
         x_times_dict = dict()
@@ -89,6 +90,10 @@ class SequencesCreator():
                     y_times_dict[x] = (
                         y_times_dict[x] + y_serie if i > 0 else y_serie)
 
+                elif x in sys_features:
+                    vec['prefixes'][sys_features[x]] = (vec['prefixes'][sys_features[x]] + serie if i > 0 else serie)
+                    vec['next_evt'][sys_features[x]] = (vec['next_evt'][sys_features[x]] + y_serie if i > 0 else y_serie)
+
         # Transform task, dur and role prefixes in vectors
         for value in equi.values():
             vec['prefixes'][value] = np.array(vec['prefixes'][value])
@@ -103,6 +108,14 @@ class SequencesCreator():
             x_times_dict[key] = np.array(value)
             x_times_dict[key] = x_times_dict[key].reshape(
                 (x_times_dict[key].shape[0], x_times_dict[key].shape[1], 1))
+        # reshape system features
+        for x in sys_features.values():
+            if x in vec['prefixes'].keys():
+                vec['prefixes'][x] = np.array(vec['prefixes'][x])
+                vec['prefixes'][x] = vec['prefixes'][x].reshape((vec['prefixes'][x].shape[0], vec['prefixes'][x].shape[1], 1))
+            if x in vec['next_evt'].keys():
+                vec['next_evt'][x] = np.array(vec['next_evt'][x])
+                vec['next_evt'][x] = vec['next_evt'][x].reshape((vec['next_evt'][x].shape[0], 1))
         vec['prefixes']['times'] = np.dstack(list(x_times_dict.values()))
         # Reshape y times attributes (suffixes, number of attributes)
         vec['next_evt']['times'] = np.dstack(list(y_times_dict.values()))[0]
