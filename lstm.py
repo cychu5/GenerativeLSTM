@@ -61,6 +61,9 @@ def main(argv):
                                      'cellsize=', 'optimizer='])
             for opt, arg in opts:
                 parameters[catch_parameter(opt)] = arg
+            for param in ['n_size', 'l_size']:
+                if param in parameters.keys():
+                    parameters[param] = int(parameters[param])
         except getopt.GetoptError:
             print('Invalid option')
             sys.exit(2)
