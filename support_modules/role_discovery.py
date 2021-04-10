@@ -132,7 +132,7 @@ def role_discovery(data, drawing, sim_percentage):
             g.add_edge(relation['x'],relation['y'],weight=relation['distance'])
 #    sup.print_progress(((60 / 100)* 100),'Analysing resource pool ')
     # extraction of fully conected subgraphs as roles
-    sub_graphs = list(nx.connected_component_subgraphs(g))
+#    sub_graphs = list(nx.connected_component_subgraphs(g))
     sub_graphs = list(g.subgraph(c) for c in nx.connected_components(g))
 #    sup.print_progress(((80 / 100)* 100),'Analysing resource pool ')
     # role definition from graph
