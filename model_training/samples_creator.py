@@ -65,7 +65,11 @@ class SequencesCreator():
         # hacer equi como si fueran intercases.
         times = ['dur_norm'] if parms['one_timestamp'] else ['dur_norm', 'wait_norm']
         equi = {'ac_index': 'activities', 'rl_index': 'roles'}
-        sys_features = {'curr_active_cases_norm': 'active_cases'}
+
+        # Currently only one system feature is used at a time. For multiple system features, set the dict like follows:
+        # sys_features = {'system_feature1_norm': 'system_feature1', 'system_feature2_norm': 'system_feature2'}
+        sys_features = {'sys_feature_norm': 'sys_feature'}
+
         vec = {'prefixes': dict(),
                'next_evt': dict()}
         x_times_dict = dict()
