@@ -96,10 +96,13 @@ class SuffixSamplesCreator():
         print(columns)
         times = ['dur_norm'] if parms['one_timestamp'] else ['dur_norm', 'wait_norm']
         equi = {'ac_index': 'activities', 'rl_index': 'roles'}
+        sys_features = {'sys_feature_norm': 'sys_feature'}
         vec = {'prefixes': dict(),
                'next_evt': dict()}
         x_times_dict = dict()
         y_times_dict = dict()
+        x_sf_dict = dict()
+        y_sf_dict = dict()
         self.log = self.reformat_events(columns, parms['one_timestamp'])
         # n-gram definition
         for i, _ in enumerate(self.log):
@@ -120,6 +123,9 @@ class SuffixSamplesCreator():
                         x_times_dict[x] + serie if i > 0 else serie)
                     y_times_dict[x] = (
                         y_times_dict[x] + y_serie if i > 0 else y_serie)
+                elif x == 'sys_feature_norm':
+                    x_sf_dict[x] = (x_sf_dict[x] + serie if i > 0 else serie)
+                    y_sf_dict[x] = (y_sf_dict[x] + y_serie if i > 0 else y_serie)
         vec['prefixes']['times'] = list()
         x_times_dict = pd.DataFrame(x_times_dict)
         for row in x_times_dict.values:
@@ -135,6 +141,23 @@ class SuffixSamplesCreator():
             new_row = np.dstack(new_row)
             new_row = new_row.reshape((new_row.shape[1], new_row.shape[2]))
             vec['next_evt']['times'].append(new_row)
+
+        vec['prefixes']['sys_feature'] = list()
+        x_sf_dict = pd.DataFrame(x_sf_dict)
+        for row in x_sf_dict.values:
+            new_row = [np.array(x) for x in row]
+            new_row = np.dstack(new_row)
+            new_row = new_row.reshape((new_row.shape[1], new_row.shape[2]))
+            vec['prefixes']['sys_feature'].append(new_row)
+
+        vec['next_evt']['sys_feature'] = list()
+        y_sf_dict = pd.DataFrame(y_sf_dict)
+        for row in y_sf_dict.values:
+            new_row = [np.array(x) for x in row]
+            new_row = np.dstack(new_row)
+            new_row = new_row.reshape((new_row.shape[1], new_row.shape[2]))
+            vec['next_evt']['sys_feature'].append(new_row)
+
         return vec
 
 

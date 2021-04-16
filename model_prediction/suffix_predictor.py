@@ -41,6 +41,7 @@ class SuffixPredictor():
             rl_index (dict): index of roles.
             imp (str): method of next event selection.
         """
+
         # Generation of predictions
         results = list()
         for i, _ in enumerate(self.spl['prefixes']['activities']):
@@ -65,8 +66,16 @@ class SuffixPredictor():
                     [-parms['dim']['time_dim']:]
                     .reshape((parms['dim']['time_dim'], times_attr_num))]
                 )
+            x_sf_ngram = np.array(
+                    [np.append(np.zeros(
+                        (parms['dim']['time_dim'], times_attr_num)),
+                        self.spl['prefixes']['sys_feature'][i], axis=0)
+                        [-parms['dim']['time_dim']:]
+                        .reshape((parms['dim']['time_dim'], times_attr_num))]
+                    )
+
             if vectorizer in ['basic']:
-                inputs = [x_ac_ngram, x_rl_ngram, x_t_ngram]
+                inputs = [x_ac_ngram, x_rl_ngram, x_t_ngram, x_sf_ngram]
             elif vectorizer in ['inter']:
                 inter_attr_num = self.spl['prefixes']['inter_attr'][i].shape[1]
                 x_inter_ngram = np.array([np.append(
@@ -97,8 +106,11 @@ class SuffixPredictor():
                 x_rl_ngram = np.delete(x_rl_ngram, 0, 1)
                 x_t_ngram = np.append(x_t_ngram, [preds[2]], axis=1)
                 x_t_ngram = np.delete(x_t_ngram, 0, 1)
+                x_sf_ngram = np.append(x_sf_ngram, [preds[3]], axis=1)
+                x_sf_ngram = np.delete(x_sf_ngram, 0, 1)
+
                 if vectorizer in ['basic']:
-                    inputs = [x_ac_ngram, x_rl_ngram, x_t_ngram]
+                    inputs = [x_ac_ngram, x_rl_ngram, x_t_ngram, x_sf_ngram]
                 elif vectorizer in ['inter']:
                     x_inter_ngram = np.append(x_inter_ngram, [preds[3]], axis=1)
                     x_inter_ngram = np.delete(x_inter_ngram, 0, 1)
@@ -122,6 +134,9 @@ class SuffixPredictor():
         return results
 
     def create_result_record(self, index, spl, preds, parms, pref_size):
+        if 'dur' in parms['scale_args'].keys():
+            parms['scale_args'] = parms['scale_args']['dur']
+
         record = dict()
         record['pref_size'] = pref_size
         record['ac_prefix'] = spl['prefixes']['activities'][index]

@@ -96,7 +96,7 @@ class ModelPredictor():
                 del data['activity']
             self.parms = {**self.parms, **{k: v for k, v in data.items()}}
             self.parms['dim'] = {k: int(v) for k, v in data['dim'].items()}
-            if self.parms['one_timestamp']:
+            if self.parms['one_timestamp'] and type(list(data['scale_args'].values())[0]) is not dict:
                 self.parms['scale_args'] = {
                     k: float(v) for k, v in data['scale_args'].items()}
             else:
