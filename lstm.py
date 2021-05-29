@@ -16,7 +16,7 @@ def catch_parameter(opt):
               '-m': 'model_type', '-z': 'n_size', '-y': 'l_size',
               '-c': 'folder', '-b': 'model_file', '-x': 'is_single_exec',
               '-t': 'max_trace_size', '-e': 'splits', '-g': 'sub_group',
-              '-v': 'variant', '-r': 'rep', '-s': 'ns_include'}
+              '-v': 'variant', '-r': 'rep', '-s': 'ns_include', '-u': 'sys_feature'}
     try:
         return switch[opt]
     except:
@@ -78,14 +78,14 @@ def main(argv):
         try:
             opts, _ = getopt.getopt(
                 argv,
-                "ho:a:f:i:l:d:p:n:m:z:y:c:b:x:t:e:v:r:s:",
+                "ho:a:f:i:l:d:p:n:m:z:y:c:b:x:t:e:v:r:s:u:",
                 ['one_timestamp=', 'activity=',
                  'file_name=', 'imp=', 'lstm_act=',
                  'dense_act=', 'optim=', 'norm_method=',
                  'model_type=', 'n_size=', 'l_size=',
                  'folder=', 'model_file=', 'is_single_exec=',
                  'max_trace_size=', 'splits=', 'sub_group=',
-                 'variant=', 'rep=', 'ns_include='])
+                 'variant=', 'rep=', 'ns_include=', 'sys_feature='])
             for opt, arg in opts:
                 key = catch_parameter(opt)
                 if arg in ['None', 'none']:
@@ -97,6 +97,8 @@ def main(argv):
                     parameters[key] = int(arg)
                 else:
                     parameters[key] = arg
+            if 'sys_feature' in parameters.keys():
+                column_names[parameters['sys_feature']] = 'sys_feature'
             parameters['read_options'] = {'timeformat': '%Y-%m-%dT%H:%M:%S.%f',
                                           'column_names': column_names,
                                           'one_timestamp':
