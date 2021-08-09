@@ -9,6 +9,7 @@ import tensorflow as tf
 from model_training.models import model_specialized as mspec
 from model_training.models import model_concatenated as mcat
 from model_training.models import model_shared_cat as mshcat
+from model_training.models import model_joint as mjoint
 
 from model_training.models import model_gru_specialized as mspecg
 from model_training.models import model_gru_concatenated as mcatg
@@ -26,6 +27,7 @@ class ModelLoader():
         self.trainer_dispatcher = {'specialized': mspec._training_model,
                                    'concatenated': mcat._training_model,
                                    'shared_cat': mshcat._training_model,
+                                   'joint': mjoint._training_model,
                                    'specialized_gru': mspecg._training_model,
                                    'concatenated_gru': mcatg._training_model,
                                    'shared_cat_gru': mshcatg._training_model,

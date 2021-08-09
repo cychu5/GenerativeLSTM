@@ -293,6 +293,7 @@ class EvaluateTask():
     def clean_parameters(parms):
         exp_desc = parms.copy()
         exp_desc.pop('activity', None)
+        exp_desc.pop('additional_columns', None)
         exp_desc.pop('read_options', None)
         exp_desc.pop('column_names', None)
         exp_desc.pop('one_timestamp', None)
