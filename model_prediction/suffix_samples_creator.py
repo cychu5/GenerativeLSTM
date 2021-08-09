@@ -105,7 +105,13 @@ class SuffixSamplesCreator():
         for i, _ in enumerate(self.log):
             for x in columns:
                 serie, y_serie = list(), list()
+
+                # Case 1: Use all trace prefixes for prediction
                 for idx in range(1, len(self.log[i][x])):
+
+                # Case 2: Use only a subset of trace prefixes for prediction
+                #for idx in range(1, len(self.log[i][x]), max(1, int(len(self.log[i][x])/5))):
+
                     serie.append(self.log[i][x][:idx])
                     y_serie.append(self.log[i][x][idx:])
                 if x in list(equi.keys()):
